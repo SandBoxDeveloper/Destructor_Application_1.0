@@ -94,9 +94,6 @@ public class RecipientsActivity extends ListActivity {
                     dialog.show();
                 }
 
-
-
-
             }
         });
     }
