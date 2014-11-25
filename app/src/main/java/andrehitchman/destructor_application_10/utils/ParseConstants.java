@@ -1,4 +1,4 @@
-package andrehitchman.destructor_application_10;
+package andrehitchman.destructor_application_10.utils;
 
 /**
  * Created by Zeus on 04/11/2014.

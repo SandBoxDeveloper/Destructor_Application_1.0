@@ -1,4 +1,4 @@
-package andrehitchman.destructor_application_10;
+package andrehitchman.destructor_application_10.ui;
 
 
 import android.app.ActionBar;
@@ -16,15 +16,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseAnalytics;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.File;
@@ -33,11 +27,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-
-
+import andrehitchman.destructor_application_10.R;
+import andrehitchman.destructor_application_10.adapters.SectionsPagerAdapter;
+import andrehitchman.destructor_application_10.utils.ParseConstants;
 
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {

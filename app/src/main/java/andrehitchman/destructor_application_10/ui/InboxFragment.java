@@ -1,14 +1,16 @@
-package andrehitchman.destructor_application_10;
+package andrehitchman.destructor_application_10.ui;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -20,18 +22,26 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import andrehitchman.destructor_application_10.R;
+import andrehitchman.destructor_application_10.adapters.MessageAdapter;
+import andrehitchman.destructor_application_10.utils.ParseConstants;
+
 /**
  * Created by Zeus on 03/11/2014.
  */
 public class InboxFragment extends ListFragment {
 
     protected List<ParseObject> mMessages;
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
 
     //called when the layout is drawn for th first time
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_inbox, container, false);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
         return rootView;
     }
 
@@ -122,4 +132,11 @@ public class InboxFragment extends ListFragment {
             message.saveInBackground();
         }
     }
+
+    protected OnRefreshListener mOnRefreshListener = new OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            Toast.makeText(getActivity(), "We're refreshing!", Toast.LENGTH_SHORT).show();
+        }
+    };
 }

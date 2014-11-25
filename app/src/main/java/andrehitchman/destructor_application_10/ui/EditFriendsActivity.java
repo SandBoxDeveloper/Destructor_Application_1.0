@@ -1,10 +1,9 @@
-package andrehitchman.destructor_application_10;
+package andrehitchman.destructor_application_10.ui;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -18,6 +17,9 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.List;
+
+import andrehitchman.destructor_application_10.R;
+import andrehitchman.destructor_application_10.utils.ParseConstants;
 
 public class EditFriendsActivity extends ListActivity {
 

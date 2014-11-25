@@ -1,10 +1,9 @@
-package andrehitchman.destructor_application_10;
+package andrehitchman.destructor_application_10.ui;
 
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 

@@ -1,4 +1,4 @@
-package andrehitchman.destructor_application_10;
+package andrehitchman.destructor_application_10.adapters;
 
 /**
  * Created by Zeus on 03/11/2014.
@@ -11,6 +11,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.Locale;
+
+import andrehitchman.destructor_application_10.R;
+import andrehitchman.destructor_application_10.ui.FriendsFragment;
+import andrehitchman.destructor_application_10.ui.InboxFragment;
 
 
 /**

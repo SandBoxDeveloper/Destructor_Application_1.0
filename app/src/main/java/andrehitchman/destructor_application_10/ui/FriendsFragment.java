@@ -1,4 +1,4 @@
-package andrehitchman.destructor_application_10;
+package andrehitchman.destructor_application_10.ui;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -16,6 +16,9 @@ import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.List;
+
+import andrehitchman.destructor_application_10.R;
+import andrehitchman.destructor_application_10.utils.ParseConstants;
 
 
 /**

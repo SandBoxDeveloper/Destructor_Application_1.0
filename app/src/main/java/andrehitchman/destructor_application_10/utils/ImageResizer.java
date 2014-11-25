@@ -1,6 +1,4 @@
-package andrehitchman.destructor_application_10;
-
-import java.io.ByteArrayOutputStream;
+package andrehitchman.destructor_application_10.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

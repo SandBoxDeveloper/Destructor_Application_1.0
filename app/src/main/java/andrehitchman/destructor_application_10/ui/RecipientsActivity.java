@@ -1,4 +1,4 @@
-package andrehitchman.destructor_application_10;
+package andrehitchman.destructor_application_10.ui;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -25,6 +25,10 @@ import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import andrehitchman.destructor_application_10.R;
+import andrehitchman.destructor_application_10.utils.FileHelper;
+import andrehitchman.destructor_application_10.utils.ParseConstants;
 
 public class RecipientsActivity extends ListActivity {
 
