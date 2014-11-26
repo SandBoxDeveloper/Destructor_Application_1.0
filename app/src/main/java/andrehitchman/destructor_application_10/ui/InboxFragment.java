@@ -42,6 +42,12 @@ public class InboxFragment extends ListFragment {
 
         mSwipeRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+        mSwipeRefreshLayout.setColorScheme(
+                R.color.swipeRefresh1,
+                R.color.swipeRefresh2,
+                R.color.swipeRefresh3,
+                R.color.swipeRefresh4
+        );
         return rootView;
     }
 
@@ -51,6 +57,10 @@ public class InboxFragment extends ListFragment {
 
         getActivity().setProgressBarIndeterminateVisibility(true);
 
+        retrieveMessages();
+    }
+
+    private void retrieveMessages() {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_MESSAGES);
         // look at all the ID's included in this list, see if match for our specific object ID
         query.whereEqualTo(ParseConstants.KEY_RECIPIENT_IDS, ParseUser.getCurrentUser().getObjectId());
@@ -62,6 +72,13 @@ public class InboxFragment extends ListFragment {
             public void done(List<ParseObject> messages, ParseException e) {
                 // dismiss progress indicator
                 getActivity().setProgressBarIndeterminateVisibility(false);
+
+                // check if refreshing
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    // stop refreshing
+                    // end refreshing once messages are retrieved
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
 
                 if(e == null) {
                     // found messages
@@ -136,7 +153,7 @@ public class InboxFragment extends ListFragment {
     protected OnRefreshListener mOnRefreshListener = new OnRefreshListener() {
         @Override
         public void onRefresh() {
-            Toast.makeText(getActivity(), "We're refreshing!", Toast.LENGTH_SHORT).show();
+            retrieveMessages();
         }
     };
 }

@@ -38,7 +38,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    // constant member variabls
+    // constant member variables
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int TAKE_VIDEO_REQUEST = 1;
     public static final int PICK_PHOTO_REQUEST = 2;
