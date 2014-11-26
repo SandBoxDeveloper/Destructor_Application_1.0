@@ -2,12 +2,14 @@ package andrehitchman.destructor_application_10.ui;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -18,13 +20,14 @@ import com.parse.ParseUser;
 import java.util.List;
 
 import andrehitchman.destructor_application_10.R;
+import andrehitchman.destructor_application_10.adapters.UserAdapter;
 import andrehitchman.destructor_application_10.utils.ParseConstants;
 
 
 /**
  * Created by Zeus on 03/11/2014.
  */
-public class FriendsFragment extends ListFragment {
+public class FriendsFragment extends Fragment {
 
     public static final String TAG = FriendsFragment.class.getSimpleName();
 
@@ -32,11 +35,20 @@ public class FriendsFragment extends ListFragment {
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
 
+    protected GridView mGridView;
+
     //called when the layout is drawn for th first time
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
+
+        mGridView = (GridView)rootView.findViewById(R.id.friendsGrid);
+        // for when the GridView is empty
+        TextView emptyTextView = (TextView)rootView.findViewById(android.R.id.empty);
+        // attach this as the empty TextView for the GridView
+        mGridView.setEmptyView(emptyTextView);
+
         return rootView;
     }
 
@@ -66,15 +78,20 @@ public class FriendsFragment extends ListFragment {
                        usernames[i] = user.getUsername();
                        i++;
                    }
-                   ArrayAdapter<String> adapter = new ArrayAdapter<String>(getListView().getContext(),
-                           android.R.layout.simple_list_item_1,
-                           usernames);
-                   setListAdapter(adapter);
+                   if (mGridView.getAdapter() == null) {
+                       // if null then create
+                       UserAdapter adapter = new UserAdapter(getActivity(), mFriends);
+                       mGridView.setAdapter(adapter);
+                   }
+                   else {
+                        // refill
+                       ((UserAdapter)mGridView.getAdapter()).refill(mFriends);
+                   }
                }
                else {
                    // failed
                    Log.e(TAG, e.getMessage());
-                   AlertDialog.Builder builder = new AlertDialog.Builder(getListView().getContext());
+                   AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                    // set message title and text for the button
                    builder.setMessage(e.getMessage())
                            .setTitle(R.string.error_title)

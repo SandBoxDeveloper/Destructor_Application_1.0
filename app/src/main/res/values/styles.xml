@@ -32,12 +32,16 @@
         <item name="android:editTextBackground">@drawable/apptheme_edit_text_holo_light</item>
         <item name="android:actionOverflowButtonStyle">@style/Theme.Destructor.Overflow</item>
         <item name="android:listViewStyle">@style/Theme.Destructor.LightPurpleBackground</item>
-        <item name="android:gridViewStyle">@style/Theme.Destructor.LightPurpleBackground</item>
+        <item name="android:gridViewStyle">@style/Theme.Destructor.LightPurpleBackground.GridView</item>
     </style>
 
     <style name="Theme.Destructor.LightPurpleBackground">
         <item name="android:background">@color/light_purple_background</item>
         <item name="android:divider">@null</item><!-- @null means no divider will be used -->
+    </style>
+
+    <style name="Theme.Destructor.LightPurpleBackground.GridView">
+        <item name="android:padding">@dimen/user_grid_spacing</item>
     </style>
 
     <style name="Theme.Destructor.Overflow" parent="@android:style/Widget.ActionButton.Overflow">
