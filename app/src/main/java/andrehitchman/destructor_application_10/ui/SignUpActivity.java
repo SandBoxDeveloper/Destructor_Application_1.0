@@ -14,6 +14,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import andrehitchman.destructor_application_10.DestructorApplication;
 import andrehitchman.destructor_application_10.R;
 
 public class SignUpActivity extends Activity {
@@ -86,6 +87,8 @@ public class SignUpActivity extends Activity {
                             // exception null is sign-up exceeded
                             if (e == null) {
                                 // success
+                                // store the current user's ID in the parseInstallation object
+                                DestructorApplication.updateParseInstallation(ParseUser.getCurrentUser());
                                 Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                                 // so that user isn't able ot go back to the sign-up page with the back button
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // create a new class

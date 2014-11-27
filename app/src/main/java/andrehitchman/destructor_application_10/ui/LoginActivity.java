@@ -15,6 +15,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
+import andrehitchman.destructor_application_10.DestructorApplication;
 import andrehitchman.destructor_application_10.R;
 
 public class LoginActivity extends Activity {
@@ -85,6 +86,9 @@ public class LoginActivity extends Activity {
                             setProgressBarIndeterminateVisibility(false); // make progress bar invisible
                             if (e == null) {
                                 // success
+                                // store the current user's ID in the parseInstallation object
+                                DestructorApplication.updateParseInstallation(parseUser);
+
                                 // take user to inbox
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 // so that user isn't able ot go back to the sign-up page with the back button
