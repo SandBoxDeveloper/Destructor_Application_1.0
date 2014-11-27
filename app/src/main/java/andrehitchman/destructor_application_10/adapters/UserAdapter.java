@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,6 +41,7 @@ public class UserAdapter extends ArrayAdapter<ParseUser> {
             holder = new ViewHolder();
             holder.userImageView = (ImageView) convertView.findViewById(R.id.userImageView);
             holder.nameLabel = (TextView) convertView.findViewById(R.id.nameLabel);
+            holder.checkImageView = (ImageView)convertView.findViewById(R.id.checkImageView);
             convertView.setTag(holder); // to allow users to scroll through the list of items, without an error
         }
         else {
@@ -62,20 +64,25 @@ public class UserAdapter extends ArrayAdapter<ParseUser> {
                     .placeholder(R.drawable.avatar_empty) // if HTTP response code 404 returned, display default
                     .into(holder.userImageView);
         }
-
-        /*if(user.getString(ParseConstants.KEY_FILE_TYPE).equals(ParseConstants.TYPE_IMAGE)) {
-            holder.userImageView.setImageResource(R.drawable.ic_picture);
-        }
-        else {
-            holder.userImageView.setImageResource(R.drawable.ic_video);
-        }*/
         holder.nameLabel.setText(user.getUsername());
 
+        // ref to the GridView
+        GridView gridView = (GridView)parent;
+        // check if the item being tapped on, is tapped.
+        if (gridView.isItemChecked(position)) {
+            // show checkmark
+            holder.checkImageView.setVisibility(View.VISIBLE);
+        }
+        else {
+            // if not checked, make invisible
+            holder.checkImageView.setVisibility(View.INVISIBLE);
+        }
         return convertView;
     }
 
     private  static class ViewHolder {
         ImageView userImageView;
+        ImageView checkImageView;
         TextView nameLabel;
     }
 

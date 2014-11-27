@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -41,6 +43,7 @@ public class EditFriendsActivity extends Activity {
         mGridView = (GridView)findViewById(R.id.friendsGrid);
         // set ListView to allow multiple items to be checked.
         mGridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+        mGridView.setOnItemClickListener(mOnItemClickListener);
 
         // for when the GridView is empty
         TextView emptyTextView = (TextView)findViewById(android.R.id.empty);
@@ -105,32 +108,6 @@ public class EditFriendsActivity extends Activity {
     }
 
 
-    /*@Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        if (getListView().isItemChecked(position)) {
-            // add friend locally
-            mFriendsRelation.add(mUsers.get(position)); // adds user locally
-        }
-        else {
-            // remove friend
-            mFriendsRelation.remove(mUsers.get(position));
-        }
-
-
-        // this gets called for both if/else statements no matter what
-        // save into backend (Parse)
-        mCurrentUser.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        });
-    }*/
-
     private void addFriendCheckmarks() {
         mFriendsRelation.getQuery().findInBackground(new FindCallback<ParseUser>() {
             @Override
@@ -143,7 +120,7 @@ public class EditFriendsActivity extends Activity {
                         for (ParseUser friend : friends) {
                             if(friend.getObjectId().equals(user.getObjectId())) {
                                 // match found, set check-box
-                                mGridView.setItemChecked(i, true);
+                                mGridView.setItemChecked(i, true); // causes the adapter to update the view again
                             }
                         }
                     }
@@ -154,4 +131,38 @@ public class EditFriendsActivity extends Activity {
             }
         });
     }
+
+    protected AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            // show or hide the image for the checkmark overlay
+
+            // ref to ImageView
+            ImageView checkImageView = (ImageView)view.findViewById(R.id.checkImageView);
+
+            if (mGridView.isItemChecked(position)) {
+                // add the friend
+                mFriendsRelation.add(mUsers.get(position));
+                checkImageView.setVisibility(View.VISIBLE); // make checkmark visible
+            }
+            else {
+                // remove the friend
+                mFriendsRelation.remove(mUsers.get(position));
+                checkImageView.setVisibility(View.INVISIBLE); // make checkmark invisible
+            }
+
+
+            // this gets called for both if/else statements no matter what
+            // save into backend (Parse)
+            mCurrentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e != null) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            });
+
+        }
+    };
 }
