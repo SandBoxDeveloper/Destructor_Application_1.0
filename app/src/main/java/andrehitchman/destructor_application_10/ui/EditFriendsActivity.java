@@ -1,13 +1,15 @@
 package andrehitchman.destructor_application_10.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -19,23 +21,31 @@ import com.parse.SaveCallback;
 import java.util.List;
 
 import andrehitchman.destructor_application_10.R;
+import andrehitchman.destructor_application_10.adapters.UserAdapter;
 import andrehitchman.destructor_application_10.utils.ParseConstants;
 
-public class EditFriendsActivity extends ListActivity {
+public class EditFriendsActivity extends Activity {
 
     public static final String TAG = EditFriendsActivity.class.getSimpleName();
     protected List<ParseUser> mUsers;
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
+    protected GridView mGridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS); // progress bar
-        setContentView(R.layout.activity_edit_friends);
+        setContentView(R.layout.user_grid);
 
+        mGridView = (GridView)findViewById(R.id.friendsGrid);
         // set ListView to allow multiple items to be checked.
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        mGridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+
+        // for when the GridView is empty
+        TextView emptyTextView = (TextView)findViewById(android.R.id.empty);
+        // attach this as the empty TextView for the GridView
+        mGridView.setEmptyView(emptyTextView);
     }
 
     @Override
@@ -64,10 +74,17 @@ public class EditFriendsActivity extends ListActivity {
                         usernames[i] = user.getUsername();
                         i++;
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(EditFriendsActivity.this,
-                            android.R.layout.simple_list_item_checked,
-                            usernames);
-                    setListAdapter(adapter); // method from ListActivity class
+                    // loading the gridView, setting the adapter, then re-filling it
+                    if (mGridView.getAdapter() == null) {
+                        // if null then create
+                        UserAdapter adapter = new UserAdapter(EditFriendsActivity.this, mUsers);
+                        mGridView.setAdapter(adapter);
+                    }
+                    else {
+                        // refill
+                        ((UserAdapter)mGridView.getAdapter()).refill(mUsers);
+                    }
+
                     addFriendCheckmarks();
                 }
                 else {
@@ -88,7 +105,7 @@ public class EditFriendsActivity extends ListActivity {
     }
 
 
-    @Override
+    /*@Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
@@ -112,7 +129,7 @@ public class EditFriendsActivity extends ListActivity {
                 }
             }
         });
-    }
+    }*/
 
     private void addFriendCheckmarks() {
         mFriendsRelation.getQuery().findInBackground(new FindCallback<ParseUser>() {
@@ -126,7 +143,7 @@ public class EditFriendsActivity extends ListActivity {
                         for (ParseUser friend : friends) {
                             if(friend.getObjectId().equals(user.getObjectId())) {
                                 // match found, set check-box
-                                getListView().setItemChecked(i, true);
+                                mGridView.setItemChecked(i, true);
                             }
                         }
                     }
