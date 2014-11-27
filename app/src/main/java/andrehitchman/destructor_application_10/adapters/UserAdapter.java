@@ -1,7 +1,7 @@
 package andrehitchman.destructor_application_10.adapters;
 
 import android.content.Context;
-import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +9,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.squareup.picasso.Picasso;
 
-import java.util.Date;
 import java.util.List;
 
 import andrehitchman.destructor_application_10.R;
-import andrehitchman.destructor_application_10.utils.ParseConstants;
+import andrehitchman.destructor_application_10.utils.MD5Util;
 
 /**
  * Created by Zeus on 20/11/14.
@@ -39,7 +38,7 @@ public class UserAdapter extends ArrayAdapter<ParseUser> {
         if(convertView == null) { // views are recycled for the list view. Recycles the views if they already exists
             convertView = LayoutInflater.from(mContext).inflate(R.layout.user_item, null);
             holder = new ViewHolder();
-            //holder.iconImageView = (ImageView) convertView.findViewById(R.id.messageIcon);
+            holder.userImageView = (ImageView) convertView.findViewById(R.id.userImageView);
             holder.nameLabel = (TextView) convertView.findViewById(R.id.nameLabel);
             convertView.setTag(holder); // to allow users to scroll through the list of items, without an error
         }
@@ -48,12 +47,27 @@ public class UserAdapter extends ArrayAdapter<ParseUser> {
         }
 
         ParseUser user = mUsers.get(position);
-
-        /*if(user.getString(ParseConstants.KEY_FILE_TYPE).equals(ParseConstants.TYPE_IMAGE)) {
-            holder.iconImageView.setImageResource(R.drawable.ic_picture);
+        // get user's email address
+        String email = user.getEmail().toLowerCase();
+        // check for empty string
+        if (email.equals("")) {
+            // if empty, use default image
+            holder.userImageView.setImageResource(R.drawable.avatar_empty);
         }
         else {
-            holder.iconImageView.setImageResource(R.drawable.ic_video);
+            String hash = MD5Util.md5Hex(email);
+            String gravatarUrl = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
+            Picasso.with(mContext)
+                    .load(gravatarUrl)
+                    .placeholder(R.drawable.avatar_empty) // if HTTP response code 404 returned, display default
+                    .into(holder.userImageView);
+        }
+
+        /*if(user.getString(ParseConstants.KEY_FILE_TYPE).equals(ParseConstants.TYPE_IMAGE)) {
+            holder.userImageView.setImageResource(R.drawable.ic_picture);
+        }
+        else {
+            holder.userImageView.setImageResource(R.drawable.ic_video);
         }*/
         holder.nameLabel.setText(user.getUsername());
 
@@ -61,7 +75,7 @@ public class UserAdapter extends ArrayAdapter<ParseUser> {
     }
 
     private  static class ViewHolder {
-        //ImageView iconImageView;
+        ImageView userImageView;
         TextView nameLabel;
     }
 
