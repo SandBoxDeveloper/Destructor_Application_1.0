@@ -1,7 +1,7 @@
 package andrehitchman.destructor_application_10.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -10,8 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -27,10 +30,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import andrehitchman.destructor_application_10.R;
+import andrehitchman.destructor_application_10.adapters.UserAdapter;
 import andrehitchman.destructor_application_10.utils.FileHelper;
 import andrehitchman.destructor_application_10.utils.ParseConstants;
 
-public class RecipientsActivity extends ListActivity {
+public class RecipientsActivity extends Activity {
 
     // member variables
     public static final String TAG = RecipientsActivity.class.getSimpleName();
@@ -41,14 +45,23 @@ public class RecipientsActivity extends ListActivity {
     protected MenuItem mSendMenuItem;
     protected Uri mMediaUri;
     protected String mFileType;
+    protected GridView mGridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.user_grid);
+
+        mGridView = (GridView)findViewById(R.id.friendsGrid);
         // set ListView to allow multiple items to be checked.
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        mGridView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        mGridView.setOnItemClickListener(mOnItemClickListener);
+
+        // for when the GridView is empty
+        TextView emptyTextView = (TextView)findViewById(android.R.id.empty);
+        // attach this as the empty TextView for the GridView
+        mGridView.setEmptyView(emptyTextView);
 
         mMediaUri = getIntent().getData(); // to get the Uri that we've attached
         mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
@@ -71,7 +84,6 @@ public class RecipientsActivity extends ListActivity {
                 setProgressBarIndeterminateVisibility(false);
                 if (e ==  null) {
 
-
                     mFriends = friends;
 
                     String[] usernames = new String[mFriends.size()];
@@ -80,10 +92,16 @@ public class RecipientsActivity extends ListActivity {
                         usernames[i] = user.getUsername();
                         i++;
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getListView().getContext(),
-                            android.R.layout.simple_list_item_checked,
-                            usernames);
-                    setListAdapter(adapter);
+                    // loading the gridView, setting the adapter, then re-filling it
+                    if (mGridView.getAdapter() == null) {
+                        // if null then create
+                        UserAdapter adapter = new UserAdapter(RecipientsActivity.this, mFriends);
+                        mGridView.setAdapter(adapter);
+                    }
+                    else {
+                        // refill
+                        ((UserAdapter)mGridView.getAdapter()).refill(mFriends);
+                    }
                 }
                 else {
                     // failed
@@ -140,19 +158,6 @@ public class RecipientsActivity extends ListActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Method for list item clicks
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        // gets the number of items checked in the list, if > 0 show icon, else don't show
-        if(l.getCheckedItemCount() > 0) {
-            mSendMenuItem.setVisible(true);
-        }
-        else {
-            mSendMenuItem.setVisible(false);
-        }
-    }
 
     protected ParseObject createMessage() {
         ParseObject message = new ParseObject(ParseConstants.CLASS_MESSAGES);
@@ -181,8 +186,8 @@ public class RecipientsActivity extends ListActivity {
 
     protected ArrayList<String> getRecipientIds() {
         ArrayList<String> recipientIds = new ArrayList<String>();
-        for (int i = 0; i < getListView().getCount(); i++) {
-            if(getListView().isItemChecked(i)) {
+        for (int i = 0; i < mGridView.getCount(); i++) {
+            if(mGridView.isItemChecked(i)) {
                 recipientIds.add(mFriends.get(i).getObjectId());
             }
         }
@@ -209,6 +214,29 @@ public class RecipientsActivity extends ListActivity {
                 }
             }
         });
-
     }
+
+    protected AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            // gets the number of items checked in the list, if > 0 show icon, else don't show
+            if(mGridView.getCheckedItemCount() > 0) {
+                mSendMenuItem.setVisible(true);
+            }
+            else {
+                mSendMenuItem.setVisible(false);
+            }
+
+            ImageView checkImageView = (ImageView)view.findViewById(R.id.checkImageView);
+
+            if (mGridView.isItemChecked(position)) {
+                // add the recipient
+                checkImageView.setVisibility(View.VISIBLE); // make checkmark visible
+            }
+            else {
+                // remove the recipient
+                checkImageView.setVisibility(View.INVISIBLE); // make checkmark invisible
+            }
+        }
+    };
 }
