@@ -85,12 +85,12 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.parse.ParsePushBroadcastReceiver"
-            android:exported="false">
+            android:name="andrehitchman.destructor_application_10.utils.Receiver"
+            android:exported="false" >
             <intent-filter>
-                <action android:name="com.parse.push.intent.RECEIVE"/>
-                <action android:name="com.parse.push.intent.DELETE"/>
-                <action android:name="com.parse.push.intent.OPEN"/>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
         </receiver>
         <receiver
@@ -103,6 +103,8 @@
                 <category android:name="andrehitchman.destructor_application_10"/>
             </intent-filter>
         </receiver>
+        <meta-data android:name="com.parse.push.notification_icon"
+                   android:resource="@drawable/ic_stat_bomb"/>
     </application>
 
 </manifest>

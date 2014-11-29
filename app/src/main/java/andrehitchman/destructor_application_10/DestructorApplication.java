@@ -22,7 +22,7 @@ public class DestructorApplication extends Application {
         Parse.initialize(this, "3omIOH3U2q7RrrIYv4tR0VOXNriFdNtQUULiPDDY", "NHYQOY7bk2KDUA8E6JfaIGeDRcdhAdORHnrOB0jO");
 
         //PushService.setDefaultPushCallback(this, MainActivity.class);
-        PushService.setDefaultPushCallback(this, MainActivity.class, R.drawable.ic_stat_ic_launcher);
+        //PushService.setDefaultPushCallback(this, MainActivity.class, R.drawable.ic_stat_ic_launcher);
         ParseInstallation.getCurrentInstallation().saveInBackground();
 
     }

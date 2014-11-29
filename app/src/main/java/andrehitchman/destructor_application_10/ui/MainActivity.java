@@ -187,7 +187,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         setContentView(R.layout.activity_main);
 
         // Parse analytics, used to capture usage data
-        ParseAnalytics.trackAppOpened(getIntent());
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         // check to see if anyone is logged-in before intent is started

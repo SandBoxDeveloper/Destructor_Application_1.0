@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseInstallation;
@@ -67,6 +68,9 @@ public class RecipientsActivity extends Activity {
 
         mMediaUri = getIntent().getData(); // to get the Uri that we've attached
         mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
+
+        // Parse.com analytics, used to capture usage data
+        //ParseAnalytics.trackAppOpenedInBackground(getIntent());
     }
 
     @Override
